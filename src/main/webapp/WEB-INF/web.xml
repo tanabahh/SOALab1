@@ -16,7 +16,37 @@
 
   <servlet-mapping>
     <servlet-name>VehicleServlet</servlet-name>
-    <url-pattern>/vehicle</url-pattern>
+    <url-pattern>/vehicle/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>deleteWithEnginePowerServlet</servlet-name>
+    <servlet-class>servlet.DeleteWithEnginePowerServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>deleteWithEnginePowerServlet</servlet-name>
+    <url-pattern>/extra/delete</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>getMaxCreatingDateServlet</servlet-name>
+    <servlet-class>servlet.GetMaxCreatingDateServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>getMaxCreatingDateServlet</servlet-name>
+    <url-pattern>/extra/max-creation-date</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>groupByCreationDateServlet</servlet-name>
+    <servlet-class>servlet.GroupByCreationDateServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>groupByCreationDateServlet</servlet-name>
+    <url-pattern>/extra/group-by-creation-date</url-pattern>
   </servlet-mapping>
 
   <filter>

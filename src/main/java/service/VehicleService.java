@@ -67,8 +67,18 @@ public class VehicleService {
                                     (x.getValue().length > 1) ? x.getValue()[1] : null)
                             );
                         } else {
+                            String column = null;
+                            if (x.getKey().contains("-")) {
+                                switch (x.getKey()) {
+                                    case  "creation-date": column = "creationDate"; break;
+                                    case "engine-power": column = "enginePower"; break;
+                                    case "fuel-type": column = "fuelType"; break;
+                                }
+                            } else {
+                                column = x.getKey();
+                            }
                             filterQueryAddition.add(
-                                new QueryAdditions(TableQueryAdditions.VEHICLE, x.getKey(),
+                                new QueryAdditions(TableQueryAdditions.VEHICLE, column,
                                     x.getValue()[0],
                                     (x.getValue().length > 1) ? x.getValue()[1] : null)
                             );
@@ -86,8 +96,9 @@ public class VehicleService {
     }
 
     public void update(Integer id, String name, Integer x, Integer y,
-    VehicleType type, FuelType fuelType, Long enginePower) {
+    VehicleType type, FuelType fuelType, Long enginePower) throws BadRequestException{
         Vehicle vehicle = vehicleDao.findById(id);
+        if (vehicle == null) throw new BadRequestException("not found vehicle");
         vehicle.setName(name);
         vehicle.setCoordinates(new Coordinates(x, y));
         vehicle.setType(type);
@@ -96,8 +107,9 @@ public class VehicleService {
         vehicleDao.update(vehicle);
     }
 
-    public void delete(Integer id) {
+    public void delete(Integer id) throws BadRequestException {
         Vehicle vehicle = vehicleDao.findById(id);
+        if (vehicle == null) throw new BadRequestException("not found vehicle");
         vehicleDao.delete(vehicle);
     }
 

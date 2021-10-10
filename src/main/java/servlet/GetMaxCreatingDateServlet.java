@@ -1,8 +1,6 @@
 package servlet;
 
 import com.google.gson.Gson;
-import com.sun.tools.javac.util.List;
-import exception.BadRequestException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ import model.VehicleDto;
 import service.VehicleService;
 import utils.Validation;
 
-@WebServlet(name = "getMaxCreatingDateServlet", value = "/extra/getMaxCreatingDateServlet")
+@WebServlet(name = "getMaxCreatingDateServlet", value = "/extra/max-creation-date")
 public class GetMaxCreatingDateServlet extends HttpServlet {
 
     private VehicleService service = new VehicleService();
@@ -37,13 +35,15 @@ public class GetMaxCreatingDateServlet extends HttpServlet {
             if (vehicle != null) {
                 dto.add(new VehicleDto(vehicle));
             }
-        } catch (Exception e) {
+        } catch (Exception e) { //посмотреть какие ошибки
             req.setAttribute("error", e.getMessage());
-            resp.setStatus(404);
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/show-vehicle.jsp");
+            dispatcher.forward(req, resp);
+            return;
         }
         writer.print(this.gson.toJson(dto));
         req.setAttribute("vehicle", dto);
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/showVehicle.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/show-vehicle.jsp");
         dispatcher.forward(req, resp);
     }
 

@@ -13,9 +13,9 @@
     <input required type="text" name="name" placeholder="Имя">
     <input required type="text" name="x" placeholder="Координата x">
     <input required type="text" name="y" placeholder="Координата y">
-    <input required type="text" name="enginePower" placeholder="Мощность">
+    <input required type="text" name="engine-power" placeholder="Мощность">
     <input required type="text" name="type" placeholder="Тип">
-    <input required type="text" name="fuelType" placeholder="Тип топлива">
+    <input required type="text" name="fuel-type" placeholder="Тип топлива">
     <input type="submit" value="Обновить">
 </form>
 

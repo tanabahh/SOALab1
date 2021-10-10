@@ -9,7 +9,7 @@ public class Validation {
 
     public String checkNotEmptyString(String value, String paramName) throws BadRequestException {
         if (value == null || value.isEmpty()){
-            throw new BadRequestException(String.format("%s должно быть не пустым", paramName));
+            throw new BadRequestException(String.format("%s should be a number", paramName));
         }
         return value;
     }
@@ -23,10 +23,10 @@ public class Validation {
             number = Integer.parseInt(value);
         }
         catch (Exception e) {
-            throw new BadRequestException(String.format("%s должно быть числом", paramName));
+            throw new BadRequestException(String.format("%s should be a number", paramName));
         }
         if (number < 1) {
-            throw new BadRequestException(String.format("%s должно быть >= 1", paramName));
+            throw new BadRequestException(String.format("%s should be >= 1", paramName));
         }
         return number;
     }
@@ -37,7 +37,7 @@ public class Validation {
             number = Integer.parseInt(value);
         }
         catch (Exception e) {
-            throw new BadRequestException(String.format("%s должно быть числом", paramName));
+            throw new BadRequestException(String.format("%s should be a number", paramName));
         }
         return number;
     }
@@ -48,10 +48,10 @@ public class Validation {
             number = Integer.parseInt(value);
         }
         catch (Exception e) {
-            throw new BadRequestException(String.format("%s должно быть числом", paramName));
+            throw new BadRequestException(String.format("%s should be a number", paramName));
         }
         if (number == null) {
-            throw new BadRequestException(String.format("%s должно быть != null", paramName));
+            throw new BadRequestException(String.format("%s should be != null", paramName));
         }
         return number;
     }
@@ -62,7 +62,7 @@ public class Validation {
             number = Long.parseLong(value);
         }
         catch (Exception e) {
-            throw new BadRequestException(String.format("%s должно быть числом", paramName));
+            throw new BadRequestException(String.format("%s should be a number", paramName));
         }
         return number;
     }
@@ -76,7 +76,7 @@ public class Validation {
             return VehicleType.valueOf(value);
         }
         catch (Exception e) {
-            throw new BadRequestException(String.format("%s должно быть одно из"+ Arrays.toString(
+            throw new BadRequestException(String.format("%s should be one of this - "+ Arrays.toString(
                 VehicleType.values()), paramName));
         }
     }
@@ -86,7 +86,7 @@ public class Validation {
             return FuelType.valueOf(value);
         }
         catch (Exception e) {
-            throw new BadRequestException(String.format("%s должно быть одно из"+ Arrays.toString(
+            throw new BadRequestException(String.format("%s should be one of this - "+ Arrays.toString(
                 FuelType.values()), paramName));
         }
     }

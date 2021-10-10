@@ -8,9 +8,9 @@
     <input type="text" name="name" placeholder="Имя">
     <input type="text" name="x" placeholder="Координата x">
     <input type="text" name="y" placeholder="Координата y">
-    <input type="text" name="enginePower" placeholder="Мощность">
+    <input type="text" name="engine-power" placeholder="Мощность">
     <input type="text" name="type" placeholder="Тип">
-    <input type="text" name="fuelType" placeholder="Тип топлива">
+    <input type="text" name="fuel-type" placeholder="Тип топлива">
     <input type="submit" value="Сохранить">
 </form>
 </body>

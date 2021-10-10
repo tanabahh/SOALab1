@@ -1,8 +1,6 @@
 package utils;
 
-import model.Auto;
 import model.Coordinates;
-import model.User;
 import model.Vehicle;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;

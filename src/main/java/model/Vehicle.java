@@ -1,9 +1,9 @@
 package model;
 
+import exception.BadRequestException;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.springframework.util.StringUtils;
 
 @Entity
 @Table(name = "vehicle")
@@ -51,7 +52,8 @@ public class Vehicle {
 
     public Vehicle(String name, Coordinates coordinates,
         long enginePower,
-        VehicleType type, FuelType fuelType) {
+        VehicleType type, FuelType fuelType) throws BadRequestException{
+        validator(name, coordinates, enginePower, type, fuelType);
         this.name = name;
         this.coordinates = coordinates;
         this.enginePower = enginePower;
@@ -59,11 +61,16 @@ public class Vehicle {
         this.fuelType = fuelType;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws BadRequestException {
+        if (StringUtils.isEmpty(name)) {
+            throw new BadRequestException("name should be not empty");
+        }
         this.name = name;
     }
 
-    public void setCoordinates(Coordinates coordinates) {
+    public void setCoordinates(Coordinates coordinates) throws BadRequestException {
+        if (coordinates == null) throw
+            new BadRequestException("coordinates should be not empty");
         this.coordinates = coordinates;
     }
 
@@ -71,7 +78,8 @@ public class Vehicle {
         this.creationDate = creationDate;
     }
 
-    public void setEnginePower(long enginePower) {
+    public void setEnginePower(long enginePower) throws BadRequestException {
+        if (enginePower <= 0) throw new BadRequestException("enginePower should be > 0");
         this.enginePower = enginePower;
     }
 
@@ -79,7 +87,10 @@ public class Vehicle {
         this.type = type;
     }
 
-    public void setFuelType(FuelType fuelType) {
+    public void setFuelType(FuelType fuelType) throws BadRequestException {
+        if (fuelType == null) {
+            throw new BadRequestException("fuelType should be != null");
+        }
         this.fuelType = fuelType;
     }
 
@@ -109,5 +120,22 @@ public class Vehicle {
 
     public FuelType getFuelType() {
         return fuelType;
+    }
+
+    private void validator(String name, Coordinates coordinates,
+        long enginePower,
+        VehicleType type, FuelType fuelType) throws BadRequestException {
+        if (StringUtils.isEmpty(name)) {
+            throw new BadRequestException("name should be not empty");
+        }
+        if (coordinates == null) {
+            throw new BadRequestException("coordinates should be not empty");
+        }
+        if (enginePower <= 0) {
+            throw new BadRequestException("enginePower should be > 0");
+        }
+        if (fuelType == null) {
+            throw new BadRequestException("fuelType should be != null");
+        }
     }
 }

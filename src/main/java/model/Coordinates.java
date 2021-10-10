@@ -1,6 +1,7 @@
 package model;
 
 import com.sun.istack.NotNull;
+import exception.BadRequestException;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import javax.persistence.Entity;
@@ -24,7 +25,8 @@ public class Coordinates {
     int y; //Значение поля должно быть больше -647
 
     public Coordinates() {}
-    public Coordinates(int x, int y) {
+    public Coordinates(int x, int y) throws BadRequestException {
+        validator(x, y);
         this.x = x;
         this.y = y;
     }
@@ -39,5 +41,11 @@ public class Coordinates {
 
     public int getY() {
         return y;
+    }
+
+    private void validator(int x, int y) throws BadRequestException {
+        if (y <= -647) {
+            throw new BadRequestException("y should be > -647");
+        }
     }
 }
