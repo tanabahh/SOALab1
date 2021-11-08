@@ -1,34 +1,34 @@
 package servlet;
 
+import com.google.gson.Gson;
 import exception.BadRequestException;
-import java.io.IOException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import service.VehicleService;
 import utils.Validation;
 
-@WebServlet(name = "deleteWithEnginePowerServlet", value = "/extra/delete")
-public class DeleteWithEnginePowerServlet extends HttpServlet {
-    private VehicleService service = new VehicleService();
-    private Validation validation = new Validation();
+@Path("/extra/delete")
+public class DeleteWithEnginePowerServlet{
+    private final VehicleService service = new VehicleService();
+    private final Validation validation = new Validation();
+    private final Gson gson = new Gson();
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException, ServletException {
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response doDelete(
+        @QueryParam("engine-power")  String paramEnginePower
+    ) {
         try {
-            long enginePower = validation.checkLong(req.getParameter("engine-power"), "engine-power");
+            long enginePower = validation.checkLong(paramEnginePower, "engine-power");
             service.deleteWithEnginePower(enginePower);
         } catch (BadRequestException e) {
-            req.setAttribute("error", e.getMessage());
-            resp.setStatus(400);
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/show-vehicle.jsp");
-            dispatcher.forward(req, resp);
-            return;
+            String answer = this.gson.toJson(e.getMessage());
+            return Response.status(400).entity(answer).build();
         }
-        resp.sendRedirect(req.getContextPath() + "/vehicle");
+        return Response.ok().build();
     }
 }

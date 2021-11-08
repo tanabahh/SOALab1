@@ -9,54 +9,69 @@
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 
-  <servlet>
-    <servlet-name>VehicleServlet</servlet-name>
-    <servlet-class>servlet.VehicleServlet</servlet-class>
-  </servlet>
+<!--  <servlet>-->
+<!--    <servlet-name>VehicleServlet</servlet-name>-->
+<!--    <servlet-class>servlet.VehicleServlet</servlet-class>-->
+<!--  </servlet>-->
 
-  <servlet-mapping>
-    <servlet-name>VehicleServlet</servlet-name>
-    <url-pattern>/vehicle/*</url-pattern>
-  </servlet-mapping>
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>VehicleServlet</servlet-name>-->
+<!--    <url-pattern>/vehicle/*</url-pattern>-->
+<!--  </servlet-mapping>-->
 
-  <servlet>
-    <servlet-name>deleteWithEnginePowerServlet</servlet-name>
-    <servlet-class>servlet.DeleteWithEnginePowerServlet</servlet-class>
-  </servlet>
+<!--  <servlet>-->
+<!--    <servlet-name>Jersey REST Service</servlet-name>-->
+<!--    <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>-->
+<!--    &lt;!&ndash; Register resources and providers under com.vogella.jersey.first package. &ndash;&gt;-->
+<!--    <init-param>-->
+<!--      <param-name>jersey.config.server.provider.packages</param-name>-->
+<!--      <param-value>ru.itmo.SOA_Backend_Lab1</param-value>-->
+<!--    </init-param>-->
+<!--    <load-on-startup>1</load-on-startup>-->
+<!--  </servlet>-->
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>Jersey REST Service</servlet-name>-->
+<!--    <url-pattern>/api/*</url-pattern>-->
+<!--  </servlet-mapping>-->
 
-  <servlet-mapping>
-    <servlet-name>deleteWithEnginePowerServlet</servlet-name>
-    <url-pattern>/extra/delete</url-pattern>
-  </servlet-mapping>
+<!--  <servlet>-->
+<!--    <servlet-name>deleteWithEnginePowerServlet</servlet-name>-->
+<!--    <servlet-class>servlet.DeleteWithEnginePowerServlet</servlet-class>-->
+<!--  </servlet>-->
 
-  <servlet>
-    <servlet-name>getMaxCreatingDateServlet</servlet-name>
-    <servlet-class>servlet.GetMaxCreatingDateServlet</servlet-class>
-  </servlet>
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>deleteWithEnginePowerServlet</servlet-name>-->
+<!--    <url-pattern>/extra/delete</url-pattern>-->
+<!--  </servlet-mapping>-->
 
-  <servlet-mapping>
-    <servlet-name>getMaxCreatingDateServlet</servlet-name>
-    <url-pattern>/extra/max-creation-date</url-pattern>
-  </servlet-mapping>
+<!--  <servlet>-->
+<!--    <servlet-name>getMaxCreatingDateServlet</servlet-name>-->
+<!--    <servlet-class>servlet.GetMaxCreatingDateServlet</servlet-class>-->
+<!--  </servlet>-->
 
-  <servlet>
-    <servlet-name>groupByCreationDateServlet</servlet-name>
-    <servlet-class>servlet.GroupByCreationDateServlet</servlet-class>
-  </servlet>
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>getMaxCreatingDateServlet</servlet-name>-->
+<!--    <url-pattern>/extra/max-creation-date</url-pattern>-->
+<!--  </servlet-mapping>-->
 
-  <servlet-mapping>
-    <servlet-name>groupByCreationDateServlet</servlet-name>
-    <url-pattern>/extra/group-by-creation-date</url-pattern>
-  </servlet-mapping>
+<!--  <servlet>-->
+<!--    <servlet-name>groupByCreationDateServlet</servlet-name>-->
+<!--    <servlet-class>servlet.GroupByCreationDateServlet</servlet-class>-->
+<!--  </servlet>-->
 
-  <filter>
-    <filter-name>hiddenHttpMethodFilter</filter-name>
-    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
-  </filter>
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>groupByCreationDateServlet</servlet-name>-->
+<!--    <url-pattern>/extra/group-by-creation-date</url-pattern>-->
+<!--  </servlet-mapping>-->
 
-  <filter-mapping>
-    <filter-name>hiddenHttpMethodFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
+<!--  <filter>-->
+<!--    <filter-name>hiddenHttpMethodFilter</filter-name>-->
+<!--    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>-->
+<!--  </filter>-->
+
+<!--  <filter-mapping>-->
+<!--    <filter-name>hiddenHttpMethodFilter</filter-name>-->
+<!--    <url-pattern>/*</url-pattern>-->
+<!--  </filter-mapping>-->
 
 </web-app>

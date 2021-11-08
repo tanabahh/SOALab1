@@ -5,13 +5,12 @@
     <title>Здравствуйте!</title>
 </head>
 <body>
-
-<c:if test="${not empty error}">
-    Произошла ошибка: ${error}
-</c:if>
-
-<form action = "${pageContext.request.contextPath}/vehicle" method="get">
+<form action = "${pageContext.request.contextPath}/show-vehicle.jsp">
     <input type="submit" value="Начать работу с базой данных">
+</form>
+
+<form action = "${pageContext.request.contextPath}/shop.jsp">
+    <input type="submit" value="Начать работу со сторонним сервисом">
 </form>
 </body>
 </html>

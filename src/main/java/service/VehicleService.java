@@ -26,7 +26,7 @@ public class VehicleService {
         Integer page,
         Integer perPage,
         String[] sortList,
-        Map<String, String[]> filterMap
+        Map<String, String> filterMap
     ) throws BadRequestException {
         List<QueryAdditions> sortQueryAddition = new ArrayList<>();
         List<QueryAdditions> filterQueryAddition = new ArrayList<>();
@@ -59,12 +59,11 @@ public class VehicleService {
         if (!filterMap.isEmpty()) {
             filterMap.entrySet().forEach(
                 x -> {
-                    if (!x.getValue()[0].isEmpty()) {
+                    if (!x.getValue().isEmpty()) {
                         if (Objects.equals(x.getKey(), "x") || Objects.equals(x.getKey(), "y")) {
                             filterQueryAddition.add(
                                 new QueryAdditions(TableQueryAdditions.COORDINATES, x.getKey(),
-                                    x.getValue()[0],
-                                    (x.getValue().length > 1) ? x.getValue()[1] : null)
+                                    x.getValue())
                             );
                         } else {
                             String column = null;
@@ -79,8 +78,7 @@ public class VehicleService {
                             }
                             filterQueryAddition.add(
                                 new QueryAdditions(TableQueryAdditions.VEHICLE, column,
-                                    x.getValue()[0],
-                                    (x.getValue().length > 1) ? x.getValue()[1] : null)
+                                    x.getValue())
                             );
                         }
                     }
@@ -93,6 +91,10 @@ public class VehicleService {
 
     public void save(Vehicle vehicle) {
         vehicleDao.save(vehicle);
+    }
+
+    public Vehicle getById(Integer id) {
+        return vehicleDao.findById(id);
     }
 
     public void update(Integer id, String name, Integer x, Integer y,

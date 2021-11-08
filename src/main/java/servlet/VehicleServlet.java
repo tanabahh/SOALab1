@@ -2,20 +2,23 @@ package servlet;
 
 import com.google.gson.Gson;
 import exception.BadRequestException;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import model.Coordinates;
 import model.FuelType;
 import model.Vehicle;
@@ -25,42 +28,36 @@ import org.springframework.util.StringUtils;
 import service.VehicleService;
 import utils.Validation;
 
-@WebServlet(name = "vehicleServlet", value = "/vehicle/*")
-public class VehicleServlet extends HttpServlet {
+@Path( "/vehicle")
+public class VehicleServlet {
     private final VehicleService service = new VehicleService();
     private final String[] names = {"id", "name", "creation-date", "engine-power", "type",
         "fuel-type", "x", "y"};
     private final Validation validation = new Validation();
     private Gson gson = new Gson();
 
-    public void init(ServletConfig servletConfig) {
-        try {
-            super.init(servletConfig);
-        } catch (ServletException e) {
-            e.printStackTrace();
-        }
-    }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
-
-        addHeaders(resp);
-
-        resp.setHeader("Content-Type", "application/json; charset=UTF-16");
-
-        String pageNumber = req.getParameter("page");
-        String perPage = req.getParameter("per-page");
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVehicle(
+        @QueryParam("page") String pageNumber,
+        @QueryParam("per-page") String perPage,
+        @QueryParam("sort-state") String sortState,
+        @Context UriInfo uriInfo) {
 
         String[] sortStateArray = null;
-        if (!StringUtils.isEmpty(req.getParameter("sort-state"))) {
-            sortStateArray = req.getParameter("sort-state").split(",");
+        if (!StringUtils.isEmpty(sortState)) {
+            sortStateArray = sortState.split(",");
         }
-        Map<String, String[]> filterMap = req.getParameterMap().entrySet().stream()
-            .filter(x -> Arrays.asList(names).contains(x.getKey()))
-            .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-
-        PrintWriter writer = resp.getWriter();
+        Map<String, String> filterMap = new HashMap<String, String>();
+        if (uriInfo.getRequestUri().getQuery() != null) {
+            String[] params = uriInfo.getRequestUri().getQuery().split("&");
+            Arrays.stream(params).filter(x -> Arrays.asList(names).contains(x.split("=")[0]))
+                .filter(x -> x.split("=").length > 1)
+                .forEach(
+                    x -> filterMap.put(x.split("=")[0], x.split("=")[1])
+                );
+        }
         List<VehicleDto> dto = null;
         try {
             List<Vehicle> vehicle = service.getVehicle(
@@ -71,95 +68,90 @@ public class VehicleServlet extends HttpServlet {
             );
             if (vehicle != null) {
                 dto = vehicle.stream().map(
-                    v -> new VehicleDto(v)
+                    VehicleDto::new
                 ).collect(Collectors.toList());
             }
         } catch (BadRequestException e) {
-            req.setAttribute("error", e.getMessage());
-            resp.setStatus(400);
-            writer.println(this.gson.toJson(e.getMessage()));
+            String answer = this.gson.toJson(e.getMessage());
+            return Response.status(400).entity(answer).build();
         }
-        writer.print(this.gson.toJson(dto));
-        //resp.sendRedirect("/show-vehicle.jsp");
-        //writer.flush();
-        req.setAttribute("vehicle", dto);
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/show-vehicle.jsp");
-        dispatcher.forward(req, resp);
-
+        String answer = this.gson.toJson(dto);
+        return Response.ok(answer).header("Access-Control-Allow-Origin", "*").build();
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
-        req.setCharacterEncoding("utf8");
-        addHeaders(resp);
-        resp.setHeader("Content-Type", "application/json; charset=UTF-16LE");
-
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addVehicle(
+        @QueryParam("name") String paramName,
+        @QueryParam("x") String paramX,
+        @QueryParam("y") String paramY,
+        @QueryParam("engine-power") String paramEnginePower,
+        @QueryParam("type") String paramType,
+        @QueryParam("fuel-type") String paramFuelType,
+        @Context UriInfo uriInfo
+    ) {
         try {
-            Integer x = validation.checkInteger(req.getParameter("x"), "x");
-            Integer y = validation.checkIntegerNotNull(req.getParameter("y"), "y");
-            VehicleType type = validation.checkType(req.getParameter("type"), "type");
-            FuelType fuelType = validation.checkFuelType(req.getParameter("fuel-type"), "fuel-type");
+            Integer x = validation.checkInteger(paramX, "x");
+            Integer y = validation.checkIntegerNotNull(paramY, "y");
+            VehicleType type = validation.checkType(paramType, "type");
+            FuelType fuelType = validation.checkFuelType(paramFuelType, "fuel-type");
             Vehicle vehicle = new Vehicle(
-                validation.checkNotEmptyString(req.getParameter("name"), "name"),
+                validation.checkNotEmptyString(paramName, "name"),
                 new Coordinates(x, y),
-                validation.checkLong(req.getParameter("engine-power"), "engine-power"),
+                validation.checkLong(paramEnginePower, "engine-power"),
                 type, fuelType);
             service.save(vehicle);
         } catch (BadRequestException e) {
-            req.setAttribute("error", e.getMessage());
-            resp.setStatus(400);
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/show-vehicle.jsp");
-            dispatcher.forward(req, resp);
-            return;
+            String answer = this.gson.toJson(e.getMessage());
+            return Response.status(400).entity(answer).build();
         }
-        resp.sendRedirect(req.getContextPath() + "/vehicle");
-
+        return Response.ok().header("Access-Control-Allow-Origin", "*").build();
     }
 
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
-        req.setCharacterEncoding("utf8");
-        addHeaders(resp);
-        resp.setHeader("Content-Type", "application/json; charset=UTF-16LE");
+    @PUT
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateVehicle(
+        @PathParam("id") Integer id,
+        @QueryParam("name") String paramName,
+        @QueryParam("x") String paramX,
+        @QueryParam("y") String paramY,
+        @QueryParam("engine-power") String paramEnginePower,
+        @QueryParam("type") String paramType,
+        @QueryParam("fuel-type") String paramFuelType,
+        @Context UriInfo uriInfo
+    ) {
 
         try {
-            Integer x = validation.checkInteger(req.getParameter("x"), "x");
-            Integer y = validation.checkIntegerNotNull(req.getParameter("y"), "y");
-            Integer id = validation.checkIntegerNotNull(req.getParameter("id"), "id");
-            VehicleType type = validation.checkType(req.getParameter("type"), "type");
-            FuelType fuelType = validation.checkFuelType(req.getParameter("fuel-type"), "fuel-type");
-            Long enginePower = validation.checkLong(req.getParameter("engine-power"), "engine-power");
-            service.update(id, req.getParameter("name"), x, y, type, fuelType, enginePower);
+            Vehicle vehicle = service.getById(id);
+            Integer x = paramX == null ? vehicle.getCoordinates().getX() : validation.checkInteger(paramX, "x");
+            Integer y = paramY == null ? vehicle.getCoordinates().getY() : validation.checkIntegerNotNull(paramY, "y");
+            VehicleType type = paramType == null ? vehicle.getType() : validation.checkType(paramType, "type");
+            FuelType fuelType = paramFuelType == null ? vehicle.getFuelType() : validation.checkFuelType(paramFuelType, "fuel-type");
+            Long enginePower = paramEnginePower == null ? vehicle.getEnginePower() : validation.checkLong(paramEnginePower, "engine-power");
+            String name = paramName == null ? vehicle.getName() : paramName;
+            service.update(id, name, x, y, type, fuelType, enginePower);
         } catch (BadRequestException e) {
-            resp.setCharacterEncoding("UTF-8");
-            resp.sendError(400, e.getMessage());
-            return;
+            String answer = this.gson.toJson(e.getMessage());
+            return Response.status(400).entity(answer).build();
         }
-        resp.sendRedirect(req.getContextPath() + "/vehicle");
-
+        return Response.ok().header("Access-Control-Allow-Origin", "*").build();
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException, ServletException {
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    public Response deleteVehicle(
+        @PathParam("id") Integer id,
+        @Context UriInfo uriInfo
+    ) {
         try {
-            int id = validation.checkIntegerNotNull(req.getParameter("id"), "id");
             service.delete(id);
         } catch (BadRequestException e) {
-            resp.setCharacterEncoding("utf8");
-            resp.sendError(400, e.getMessage());
-            return;
+            String answer = this.gson.toJson(e.getMessage());
+            return Response.status(400).entity(answer).build();
         }
-        resp.sendRedirect(req.getContextPath() + "/vehicle");
+        return Response.ok().header("Access-Control-Allow-Origin", "*").build();
     }
 
-    private void addHeaders(HttpServletResponse resp) {
-        resp.setHeader("Content-Type", "application/json; charset=UTF-8");
-        resp.addHeader("Access-Control-Allow-Origin", "*");
-        resp.addHeader("Access-Control-Allow-Methods", "GET, POST, HEAD");
-        resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
-        resp.addHeader("Access-Control-Allow-Credentials", "true");
-    }
 }
