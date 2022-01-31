@@ -1,6 +1,8 @@
 package model;
 
-public class QueryAdditions {
+import java.io.Serializable;
+
+public class QueryAdditions implements Serializable {
     public TableQueryAdditions table;
     public String column;
     public String firstValue;

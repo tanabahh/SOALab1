@@ -13,11 +13,12 @@
       $.ajax({
         //crossDomain: true,
         type: 'GET',
-        url: 'https://localhost:8443/SOALab2-0.0.1-SNAPSHOT/shop/search/by-number-of-wheels/' + from + '/' + to,
+        url: 'https://localhost:8585/api/search/by-number-of-wheels/' + from + '/' + to,
         headers: {
-          'Access-Control-Allow-Origin' : 'https://localhost:8443',
-          Accept: "application/json; charset=utf-8",
-          "Content-Type": "application/json; charset=utf-8",
+            Accept: "text/html,application/xhtml+xml,application/xml;q=0.9" +
+                ",image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
+          // Accept: "application/json; charset=utf-8",
+          // "Content-Type": "application/json; charset=utf-8",
         },
         success: function (result) {
           console.log(result);
@@ -48,7 +49,7 @@
       var number =document.getElementById("number").value;
       $.ajax({
         type: 'PUT',
-        url: 'https://localhost:8443/SOALab2-0.0.1-SNAPSHOT/shop/fix-distance/'+ id + "?engine-power="+number,
+        url: 'https://localhost:8585/api/fix-distance/'+ id + "?engine-power="+number,
         headers: {
           Accept: "application/json; charset=utf-8",
           "Content-Type": "application/json; charset=utf-8"
@@ -58,7 +59,7 @@
         },
         error: function (XMLHttpRequest) {
           console.log(XMLHttpRequest.responseText)
-          document.getElementById('error-creation').innerHTML = XMLHttpRequest.responseText
+          document.getElementById('error-update').innerHTML = XMLHttpRequest.responseText
         }
       })
     })

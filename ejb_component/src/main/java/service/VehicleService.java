@@ -17,7 +17,10 @@ import model.Vehicle;
 import model.VehicleType;
 import utils.Validation;
 
-public class VehicleService {
+import javax.ejb.Stateless;
+
+@Stateless
+public class VehicleService implements VehicleServiceI {
 
     private final VehicleDao vehicleDao = new VehicleDao();
     private final Validation validation = new Validation();
@@ -126,6 +129,4 @@ public class VehicleService {
     public List<GroupByCreationDateDto> groupByCreationDate() {
         return vehicleDao.groupByCreationDate();
     }
-
-
 }

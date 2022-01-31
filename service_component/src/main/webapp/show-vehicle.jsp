@@ -22,7 +22,7 @@
       var y =document.getElementById("y").value;
       $.ajax({
         type: 'GET',
-        url: 'https://localhost:8444/SOALab1-1.0-SNAPSHOT/api/vehicle',
+        url: 'https://localhost:8444/service_component-1.0-SNAPSHOT/api/vehicle',
         data: {
           "page": page,
           "per-page": perPage,
@@ -69,7 +69,7 @@
       var enginePower =document.getElementById("engine-power-for-delete").value;
       $.ajax({
         type: 'DELETE',
-        url: 'https://localhost:8444/SOALab1-1.0-SNAPSHOT/api/extra/delete?engine-power=' + enginePower,
+        url: 'https://localhost:8444/service_component-1.0-SNAPSHOT/api/extra/delete?engine-power=' + enginePower,
         headers: {
           Accept: "application/json; charset=utf-8",
           "Content-Type": "application/json; charset=utf-8"
@@ -87,7 +87,7 @@
     $('#button-creation').click(function () {
       $.ajax({
         type: 'GET',
-        url: 'https://localhost:8444/SOALab1-1.0-SNAPSHOT/api/extra/max-creation-date',
+        url: 'https://localhost:8444/service_component-1.0-SNAPSHOT/api/extra/max-creation-date',
         headers: {
           Accept: "application/json; charset=utf-8",
           "Content-Type": "application/json; charset=utf-8"
@@ -120,7 +120,7 @@
     $('#button-show').click(function () {
       $.ajax({
         type: 'GET',
-        url: 'https://localhost:8444/SOALab1-1.0-SNAPSHOT/api/extra/group-by-creation-date',
+        url: 'https://localhost:8444/service_component-1.0-SNAPSHOT/api/extra/group-by-creation-date',
         headers: {
           Accept: "application/json; charset=utf-8",
           "Content-Type": "application/json; charset=utf-8"

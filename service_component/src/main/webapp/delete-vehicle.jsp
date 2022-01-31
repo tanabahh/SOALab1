@@ -10,7 +10,7 @@
       var id =document.getElementById("id").value;
       $.ajax({
         type: 'DELETE',
-        url: 'https://localhost:8444/SOALab1-1.0-SNAPSHOT/api/vehicle/'+id,
+        url: 'https://localhost:8444/service_component-1.0-SNAPSHOT/api/vehicle/'+id,
         headers: {
           Accept: "application/json; charset=utf-8",
           "Content-Type": "application/json; charset=utf-8"

@@ -18,7 +18,7 @@
 
       $.ajax({
         type: 'POST',
-        url: 'https://localhost:8444/SOALab1-1.0-SNAPSHOT/api/vehicle?'+ "name=" + name +
+        url: 'https://localhost:8444/service_component-1.0-SNAPSHOT/api/vehicle?'+ "name=" + name +
             "&engine-power=" + enginePower + "&type=" + type +
             "&fuel-type=" + fuelType + "&x=" + x + "&y=" + y,
         headers: {

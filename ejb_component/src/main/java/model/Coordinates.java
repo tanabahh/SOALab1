@@ -9,9 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import java.io.Serializable;
 
 @Entity
-public class Coordinates {
+public class Coordinates implements Serializable {
 
     @Id
     //@SequenceGenerator(name="coordinate-gen",sequenceName="COORDINATE_GEN", initialValue=0, allocationSize=12)

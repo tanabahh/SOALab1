@@ -16,7 +16,7 @@
       var y =document.getElementById("y").value;
       $.ajax({
         type: 'PUT',
-        url: 'https://localhost:8444/SOALab1-1.0-SNAPSHOT/api/vehicle/'+id +
+        url: 'https://localhost:8444/service_component-1.0-SNAPSHOT/api/vehicle/'+id +
             "?name=" +  name + "&engine-power=" + enginePower +
             "&type=" + type + "&fuel-type=" + fuelType +
             "&x=" + x + "&y=" + y,

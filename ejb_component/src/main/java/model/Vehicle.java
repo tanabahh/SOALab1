@@ -3,6 +3,8 @@ package model;
 import exception.BadRequestException;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,7 +21,7 @@ import org.springframework.util.StringUtils;
 
 @Entity
 @Table(name = "vehicle")
-public class Vehicle {
+public class Vehicle implements Serializable {
     @Id
     //@SequenceGenerator(name="vehicle-gen",sequenceName="VEHICLE_GEN", initialValue=0, allocationSize=12)
     @GeneratedValue(strategy= GenerationType.IDENTITY)//, generator="vehicle-gen")
